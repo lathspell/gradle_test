@@ -1,0 +1,40 @@
+import org.gradle.api.tasks.StopExecutionException
+
+plugins {
+    id 'java'
+}
+
+
+group 'de.lathspell'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+// This makes the "compileJava" task conditional
+compileJava.onlyIf {
+    project.name != "foo"
+}
+compileJava.doFirst {
+    println("Still deciding if compileJava should be run...")
+    if (1 == 2) {
+        throw new StopExecutionException("Nope, should not run!")
+    }
+}
+
+test {
+    testLogging.showStandardStreams = true
+}
+
+repositories {
+    mavenCentral()
+    // private repo: maven ("http://repo.example.com/")
+}
+
+dependencies {
+    // ugly hack to include all .jar in a subdir
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation("junit:junit:4.12") {
+        exclude group: "org.hamcrest", module: "hamcrest-core"
+    }
+}

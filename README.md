@@ -1,3 +1,14 @@
+
+Concepts
+========
+
+* "project" - usually one per build.gradle but might be more?
+* "task" - each project can have multiple tasks
+
+The project name is by default derived by the directory name. It is recommended though to
+explicitly specify it in settings.gradle, especially if using CI build tools who might check out the
+code to a random named directory.
+
 Usage
 =====
 
@@ -5,8 +16,10 @@ Usage
     gradle -i <task>        - Loglevel INFO
 
     from "java" plugin:
+    gradle init             - Interactive project creation
     gradle build            - Builds Java project
     gradle assemble         - Builds Java project
+    gradle depdendencies    - Shows dependencies graph
 
 Create new projects
 -------------------
