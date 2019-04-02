@@ -9,6 +9,14 @@ The project name is by default derived by the directory name. It is recommended 
 explicitly specify it in settings.gradle, especially if using CI build tools who might check out the
 code to a random named directory.
 
+Dependencies
+============
+
+Pre- and post Gradle 3.0:
+    compile     -> `implementation` or `api`
+    testCompile -> `testImplementation`
+    -           -> `compileOnly` 
+
 Usage
 =====
 
