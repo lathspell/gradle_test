@@ -9,4 +9,4 @@
 
 rootProject.name = "gradle_test"
 
-include("getting-started:basic-demo", "getting-started:jvm-library", "hello-java", "hello-java2", "template")
+include("dependency-fiddling", "getting-started:basic-demo", "getting-started:jvm-library", "hello-java", "hello-java2", "static-analysis", "template-java")
