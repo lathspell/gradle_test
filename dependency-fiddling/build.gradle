@@ -1,0 +1,72 @@
+plugins {
+    id 'java'               // https://docs.gradle.org/current/userguide/java_plugin.html
+    id 'application'        // https://docs.gradle.org/current/userguide/application_plugin.html
+}
+
+// Creating a task that all others depend on i.e. ensuring that it will always run first
+task myInitializer {
+    doFirst {
+        print("#DEBUG# Hello World!\n")
+        printf("#DEBUG# %d known tasks\n", tasks.getNames().size())
+        print("#DEBUG# lombokVersion=$project.ext.lombokVersion or $project.lombokVersion or $lombokVersion\n")
+    }
+}
+tasks.matching { it != myInitializer }.all { it.dependsOn myInitializer }
+
+// Print the names of all available tasks during "Configure project"
+tasks.all {
+    printf("#DEBUG# found available task %-30s from %s\n", it, it.metaClass.getTheClass().toString().replaceFirst("_Decorated\$", ""))
+}
+
+// Print the names of all actually executed tasks
+tasks.all {
+    doLast {
+        print("#DEBUG# executing task $it\n")
+    }
+}
+
+// See https://docs.gradle.org/current/userguide/java_plugin.html
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+// See https://docs.gradle.org/current/userguide/application_plugin.html
+application {
+    mainClassName = 'de.lathspell.App'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': "$mainClassName"
+    }
+
+    // This gives a fat jar!
+    doFirst {
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+    doLast {
+        print("v=$project.ext.lombokVersion")
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+// This does something similar to project.ext.set($closureWithMap). The properties are referenced simply as $foo
+// but also available as "$project.ext.foo" or "$project.foo".
+// See https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
+ext {
+    lombokVersion = "1.18.6"
+}
+
+dependencies {
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.assertj:assertj-core:3.11.1"
+
+    implementation "ch.qos.logback:logback-core:1.2.3"
+}
