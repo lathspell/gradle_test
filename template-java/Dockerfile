@@ -1,3 +1,6 @@
+###
+### Only used for the Palantir plugin!
+###
 FROM openjdk:8-jdk-alpine
 COPY template-java-groovy-all.jar /srv/foo/foo.jar
 # VOLUME /var/log/foo/

@@ -73,3 +73,31 @@ Templates
 
 The "template-java" directory should be used as template for new Java projects.
 The build.groovy.kts-beta file might not yet be up-to-date.
+
+Kotlin
+======
+
+I found two ways to configure plugins using the Kotlin DSL. The first one refers to
+`ApplicationPluginConvention` and the latter to `JavaApplication`. Not all attributes
+are equally available. Not sure what this means so the shorter version wins for now :)  
+
+```
+configure<ApplicationPluginConvention> {
+    mainClassName = "de.lathspell.App"
+}
+
+    vs.
+    
+application {
+    mainClassName = "de.lathspell.App"
+}
+```
+
+Caveats
+=======
+
+Make sure that Project Settings refer to a valid JDK or else the Kotlin DSL files will give error messages like:
+"Cannot access class 'java.lang.String'. Check your module classpath for missing or conflicting dependencies."
+
+In Intellij IDEA the `build.gradle.kts` had red underlined configuration blocks for some plugins for hours.
+They suddenly vanished after a simple "Code -> reformat".
