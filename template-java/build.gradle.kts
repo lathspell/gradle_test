@@ -6,25 +6,29 @@ plugins {
     id("com.palantir.docker") version "0.21.0"            // https://github.com/palantir/gradle-docker/ for ":docker"
 }
 
-
 // From https://docs.gradle.org/current/userguide/java_plugin.html
-val sourceCompatibility = JavaVersion.VERSION_1_8
-val targetCompatibility = JavaVersion.VERSION_1_8
+configure<JavaPluginConvention> {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
-tasks {
-    `docker` {
-
+    manifest {
+        attributes (
+            mapOf("Main-Class" to "de.lathspell.App")
+        )
     }
+}
 
+configure<ApplicationPluginConvention> {
+    mainClassName = "de.lathspell.App"
+}
+
+/*
+tasks {
     // https://docs.gradle.org/current/userguide/java_plugin.html
     jar {
         manifest {
             attributes(mapOf("Main-Class" to "de.lathspell.mainClassName"))
         }
-    }
-
-    application {
-        mainClassName = "de.lathspell.App"
     }
 
     // Run with "./gradlew clean shadowJar docker" to ensure that the fat jar is up to date
@@ -34,8 +38,8 @@ tasks {
         files("build/libs/template-java-groovy-all.jar")
         noCache(true)
     }
-
 }
+*/
 
 repositories {
     mavenCentral()

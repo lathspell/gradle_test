@@ -34,6 +34,15 @@ Usage
     gradle assemble         - Builds Java project
     gradle depdendencies    - Shows dependencies graph
 
+Gradle Wrapper
+--------------
+
+The bundled Gradle version can be updated. The version has to be specified as it defaults to
+recreate the scripts for the currently installed version. Distribution type BIN only loads the
+necessary binaries while ALL also includes the sources that are usefull for IDE autocompletion. 
+
+    ./gradlew wrapper --gradle-version=5.3.1 --distribution-type=ALL 
+
 Create new projects
 -------------------
 
