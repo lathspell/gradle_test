@@ -55,6 +55,7 @@ Plugins
 * "com.github.ben-manes.versions" - Shows outdated dependencies with ":dependencyUpdates". See https://github.com/ben-manes/gradle-versions-plugin/
 * "com.github.johnrengelman.shadow" - Creates shadowed fat jars with ":shadowJar". See https://imperceptiblethoughts.com/shadow/getting-started/
 * "nebula.ospackage" - Builds Debian .deb packages. See https://github.com/nebula-plugins/gradle-ospackage-plugin
+* "com.gorylenko.gradle-git-properties" - Creates git.properties file with current GIT revsion
 
 Migration from Maven
 ====================
