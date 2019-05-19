@@ -26,9 +26,8 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.2.3")
 }
 
-// See https://docs.gradle.org/current/userguide/java_plugin.html
+// See https://docs.gradle.org/current/userguide/java_plugin.html (org.gradle.api.plugins.JavaPlugin)
 java {
-    // (4)
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
