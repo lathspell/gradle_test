@@ -1,0 +1,99 @@
+/* The following old syntax was removed in Gradle 5:
+ task helloWorld << {
+    println 'Hello world.'
+ }
+ */
+
+defaultTasks 'first', 'second'
+
+task first {
+    doLast {
+        println 'hello: ' + it   // it is of type "Task" and has a `toString()` method
+    }
+}
+
+task second {
+    doLast { Task task ->
+        println 'hello: ' + task.getName()
+        println "hello: ${task.name}"
+    }
+}
+
+// This should print something but does not. Some kind of deprecation?
+task third {
+    doLast {
+        new Action<Task>() {
+            @Override
+            void execute(Task task) {
+                println "hello: ${task.name}"
+            }
+        }
+    }
+}
+
+task fourth {
+    doLast {
+        def ir = (1..4)
+        ir.each {
+            println "iterating $it"
+        }
+
+        def l = [ 'a', 'b', 'c' ]
+        println "list: $l with ${l.size} elements; joined=" + l.collect { it.toUpperCase() }.join("-")
+    }
+}
+
+// creates empty task
+task part1 {
+    doFirst {
+        println it.name
+    }
+}
+task part2 {
+    doFirst {
+        println it.name
+    }
+}
+task five
+five.dependsOn part1
+five.dependsOn part2
+
+task six
+[part1, part2].each { six.dependsOn it }
+
+def printTaskName = { Task task ->
+    println "Running ${task.name}"
+}
+
+task seven {
+    doLast {
+        printTaskName       // implicit parameter "it"!
+    }
+}
+
+task eight(dependsOn: part1) {
+    doLast {
+        printTaskName
+    }
+}
+
+task nine {
+    doFirst {
+        println 'in doFirst'
+    }
+    doLast {
+        println 'entering doLast'
+        printTaskName it
+        println 'leaving doLast'
+    }
+}
+nine.dependsOn {
+    // "project" holds all information about this project
+    project.tasks.findAll { Task task -> task.name.startsWith 'part' }
+}
+
+task ten(description: 'I am 10')
+
+def exampleGroupName = 'eleven'
+task eleven1(group: exampleGroupName, description: "First task of this group")
+task eleven2(group: exampleGroupName, description: "Second task of this group")

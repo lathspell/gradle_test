@@ -26,7 +26,8 @@ Usage
 =====
 
     gradle tasks --all      - List tasks
-    gradle -i <task>        - Loglevel INFO
+    gradle -q/-i <task>     - Loglevel Quiet or INFO
+    gradle --profile <task> - Emits a nice HTML page with statistics 
 
     from "java" plugin:
     gradle init             - Interactive project creation
@@ -42,6 +43,11 @@ recreate the scripts for the currently installed version. Distribution type BIN 
 necessary binaries while ALL also includes the sources that are usefull for IDE autocompletion. 
 
     ./gradlew wrapper --gradle-version=5.3.1 --distribution-type=ALL 
+
+Gradle Daemon
+-------------
+
+Can be controlled via CLI with `--no-daemon/--daemon` or `org.gradle.daemon=true` in `gradle.properties`.
 
 Create new projects
 -------------------
@@ -102,3 +108,15 @@ Make sure that Project Settings refer to a valid JDK or else the Kotlin DSL file
 
 In Intellij IDEA the `build.gradle.kts` had red underlined configuration blocks for some plugins for hours.
 They suddenly vanished after a simple "Code -> reformat".
+
+Writing Tasks
+=============
+
+Task Definition
+---------------
+
+`task(…)` with the following noteworthy parameters (see )
+* dependsOn
+* description
+* group
+
