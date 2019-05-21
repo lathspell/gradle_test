@@ -6,13 +6,13 @@
 
 defaultTasks 'first', 'second'
 
-task first {
+task ch2_1 {
     doLast {
         println 'hello: ' + it   // it is of type "Task" and has a `toString()` method
     }
 }
 
-task second {
+task ch2_2 {
     doLast { Task task ->
         println 'hello: ' + task.getName()
         println "hello: ${task.name}"
@@ -20,7 +20,7 @@ task second {
 }
 
 // This should print something but does not. Some kind of deprecation?
-task third {
+task ch2_3 {
     doLast {
         new Action<Task>() {
             @Override
@@ -31,7 +31,7 @@ task third {
     }
 }
 
-task fourth {
+task ch2_4 {
     doLast {
         def ir = (1..4)
         ir.each {
@@ -44,40 +44,40 @@ task fourth {
 }
 
 // creates empty task
-task part1 {
+task ch2_part1 {
     doFirst {
         println it.name
     }
 }
-task part2 {
+task ch2_part2 {
     doFirst {
         println it.name
     }
 }
-task five
-five.dependsOn part1
-five.dependsOn part2
+task ch2_5
+ch2_5.dependsOn ch2_part1
+ch2_5.dependsOn ch2_part2
 
-task six
-[part1, part2].each { six.dependsOn it }
+task ch2_6
+[ch2_part1, ch2_part2].each { ch2_6.dependsOn it }
 
 def printTaskName = { Task task ->
     println "Running ${task.name}"
 }
 
-task seven {
+task ch2_7 {
     doLast {
         printTaskName       // implicit parameter "it"!
     }
 }
 
-task eight(dependsOn: part1) {
+task ch2_8(dependsOn: ch2_part1) {
     doLast {
         printTaskName
     }
 }
 
-task nine {
+task ch2_9 {
     doFirst {
         println 'in doFirst'
     }
@@ -87,13 +87,80 @@ task nine {
         println 'leaving doLast'
     }
 }
-nine.dependsOn {
+ch2_9.dependsOn {
     // "project" holds all information about this project
-    project.tasks.findAll { Task task -> task.name.startsWith 'part' }
+    project.tasks.findAll { Task task -> task.name.startsWith 'ch2_part' }
 }
 
-task ten(description: 'I am 10')
+task ch2_10(description: 'I am 10')
 
-def exampleGroupName = 'eleven'
-task eleven1(group: exampleGroupName, description: "First task of this group")
-task eleven2(group: exampleGroupName, description: "Second task of this group")
+def exampleGroupName = 'Chapter 2 Eleven'
+task ch2_11_a(group: exampleGroupName, description: "First task of this group")
+task ch2_11_b(group: exampleGroupName, description: "Second task of this group")
+
+//
+// chapter 3
+//
+
+task ch3_1(description: 'Working with files') {
+    doLast {
+        File bg = file('build.gradle')
+
+        File bgFile = new File('build.gradle')
+        def bg2 = project.file(bgFile, PathValidation.FILE)
+
+        println("build.gradle size is ${bg2.size()} bytes and bg == bg2: " + (bg.size() == bg2.size()))
+    }
+}
+
+task ch3_2(description: 'Working with file trees') {
+    doLast {
+        List<File> collection = fileTree('.').include("*.gradle").collect()
+        File bg1 = collection.find { it.getName().startsWith("build") }
+        println("bg1: $bg1")
+
+        def bg2 = fileTree('.').matching {
+                        include '*.gradle'
+                        exclude 'settings.*'
+                    }.first()
+        println("bg2: $bg2")
+    }
+}
+
+task ch3_3(type: Zip, description: 'Creating ./build/zips/ch3_3.zip') {
+    // Parameter 'type' from the function 'task()' is used to create an object of type 'Zip'
+    from '.'                   // from this directory
+    include 'build.grad*'      // take those file
+
+    destinationDir(file('./build/zips/'))  // and create in this directory
+    archiveName 'ch3_3.zip'                // that file
+
+    doLast {
+        println("Task with type " + it.getClass() + " created build/zips/ch3_3.zip")
+    }
+}
+
+task ch3_4(description: 'Working with external Properties') {
+    doLast {
+        // Override on the CLI with "-PmyNumber=2" or "ORG_GRADLE_PROJECT_myNumber=4" environment variable
+        println "Property myNumber is $myNumber or with getProperty: " + getProperty("myNumber")
+    }
+}
+
+task ch3_5(description: "Logging") {
+    doLast {
+        logger.debug "This is a DEBUG message"
+        logger.info "This is a INFO message"
+        logger.lifecycle "This is a LIFECYCLE message"
+        logger.warn "This is a WARNING message"
+        logger.quiet "This is a QUIET message"
+        logger.error "This is a ERROR message"
+    }
+}
+
+//
+// Bottom of file!
+//
+
+// Put all tasks into the group "chapter3". Executing in configuring phase. Must be executed after all tasks were defined!
+project.tasks.findAll { it.name.matches('^ch[0-9]+_.*') }.forEach { it.group = it.name.replaceFirst('_.*', '').replaceFirst('^ch', 'Chapter ') }
