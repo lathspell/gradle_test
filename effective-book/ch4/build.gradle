@@ -1,0 +1,30 @@
+plugins {
+    id "java"
+    id "com.dorongold.task-tree" version "1.3.1" // Usage: gradle assemble taskTree
+}
+
+// We create a new source set called "fooby":
+// 1. We add "fooby" as SourceSet so that the Rules of the Java Plugin create
+//    "processFoobyResources", "foobyClasses" and "buildFooby" tasks
+// 2. The Java classpath has to be extended to include our classes as well.
+//    This is not done automatically as we might want to use the classes only for
+//    building a tool not for the final application.
+// 3. The "classes" task should always depend on the "foobyClasses" task
+// 4. When building the "jar" we want to include the Fooby classes as well
+sourceSets {
+    fooby       // (1)
+    main {
+        compileClasspath += files(fooby.output.classesDirs)     // (2)
+    }
+}
+classes.dependsOn "foobyClasses"    // (3)
+
+jar {
+    from sourceSets.fooby.output.classesDirs    // (4)
+
+    manifest {
+        attributes(
+                'Main-Class': 'Hello'
+        )
+    }
+}

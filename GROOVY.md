@@ -33,6 +33,15 @@ Functions and Methods
 
     foo(a: 1)           // calls method foo with a value for named parameter "a" 
 
+Shortcuts
+---------
+
+    ((PluginAware) project).apply( ['plugin': 'java'] )
+    project.apply( ['plugin': 'java'] )
+    apply( 'plugin': 'java' )
+    apply( plugin: 'java' )
+    apply plugin: 'java'
+
 Closure
 -------
  

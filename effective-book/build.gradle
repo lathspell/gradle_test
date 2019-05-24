@@ -102,7 +102,7 @@ task ch2_11_b(group: exampleGroupName, description: "Second task of this group")
 // chapter 3
 //
 
-task ch3_1(description: 'Working with files') {
+task("ch3_1", description: 'Working with files') {
     doLast {
         File bg = file('build.gradle')
 
@@ -113,7 +113,7 @@ task ch3_1(description: 'Working with files') {
     }
 }
 
-task ch3_2(description: 'Working with file trees') {
+task("ch3_2", description: 'Working with file trees') {
     doLast {
         List<File> collection = fileTree('.').include("*.gradle").collect()
         File bg1 = collection.find { it.getName().startsWith("build") }
@@ -127,7 +127,7 @@ task ch3_2(description: 'Working with file trees') {
     }
 }
 
-task ch3_3(type: Zip, description: 'Creating ./build/zips/ch3_3.zip') {
+task(type: Zip, name: "ch3_3", description: 'Creating ./build/zips/ch3_3.zip') {
     // Parameter 'type' from the function 'task()' is used to create an object of type 'Zip'
     from '.'                   // from this directory
     include 'build.grad*'      // take those file
@@ -140,14 +140,16 @@ task ch3_3(type: Zip, description: 'Creating ./build/zips/ch3_3.zip') {
     }
 }
 
-task ch3_4(description: 'Working with external Properties') {
+task("ch3_4") {
+    description = 'Working with external Properties'
     doLast {
         // Override on the CLI with "-PmyNumber=2" or "ORG_GRADLE_PROJECT_myNumber=4" environment variable
         println "Property myNumber is $myNumber or with getProperty: " + getProperty("myNumber")
     }
 }
 
-task ch3_5(description: "Logging") {
+task("ch3_5") {
+    description = "Logging"
     doLast {
         logger.debug "This is a DEBUG message"
         logger.info "This is a INFO message"
@@ -155,6 +157,36 @@ task ch3_5(description: "Logging") {
         logger.warn "This is a WARNING message"
         logger.quiet "This is a QUIET message"
         logger.error "This is a ERROR message"
+    }
+}
+
+task("ch4_properties") {
+    description = "prints important properties of the Java plugin"
+    doLast {
+        // => sourceSets.getByName("main") { … }
+        sourceSets {
+            main {
+                println "java.srcDirs = ${java.srcDirs}"
+                println "resources.srcDirs = ${resources.srcDirs}"
+                println "java.files = ${java.files.name}"
+                println "allJava.files = ${allJava.files.name}"
+                println "resources.files = ${resources.files.name}"
+                println "allSource.files = ${allSource.files.name}"
+                println "output.resourcesDir = ${output.resourcesDir}"
+                println "output.files = ${output.files}"
+            }
+        }
+    }
+}
+
+task("ch4_conventions") {
+    apply plugin: 'java'
+    description = "prints some properties of the 'convention' object"
+    doLast {
+        // All the same!
+        println "sourceSets.main.name: $sourceSets.main.name"
+        println "project.sourceSets.main.name: $project.sourceSets.main.name"
+        println "project.plugins.java.sourceSets.main.name: $project.convention.plugins.java.sourceSets.main.name"
     }
 }
 

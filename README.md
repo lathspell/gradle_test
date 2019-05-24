@@ -35,6 +35,12 @@ Usage
     gradle assemble         - Builds Java project
     gradle depdendencies    - Shows dependencies graph
 
+Gradle kann über ~/.gradle.properties und ./gradle.properties konfiguriert werden.
+Beispiele:
+
+    org.gradle.caching = true           // Aktiviert den Build-Cache
+    org.gradle.console = plain          // Zeigt auch ohne "--info" die Namen der Lifecycle Tasks an
+
 Gradle Wrapper
 --------------
 
@@ -57,6 +63,7 @@ Create new projects
 Plugins
 =======
 
+* "com.dorongold.task-tree" - Shows the task tree for a specific task. See https://plugins.gradle.org/plugin/com.dorongold.task-tree
 * Maven Publish Plugin - Alternative to Maven "install" and "deploy"
 * "com.github.ben-manes.versions" - Shows outdated dependencies with ":dependencyUpdates". See https://github.com/ben-manes/gradle-versions-plugin/
 * "com.github.johnrengelman.shadow" - Creates shadowed fat jars with ":shadowJar". See https://imperceptiblethoughts.com/shadow/getting-started/
@@ -74,6 +81,16 @@ Dependency Scopes:
 * test -> testImplementation or testRuntimeOnly
 * provided -> compileOnly (the war plugin adds providedCompile and providedRuntime)
 * import -> "implementation platform" and read chapter about BOMs in Migration page!
+
+Rule-Tasks
+==========
+
+Some plugins offer rules like e.g. this one from the Java plugin which allows commands to
+use "cleanJar" to clean the output of the "Jar" task.
+
+    Rules
+    -----
+    Pattern: clean<TaskName>: Cleans the output files of a task.
 
 Templates
 ==========
