@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // Types of dependencies:
+    // {default}                - external dependency
+    // project()                - another project
+    // files() or fileTree()    - files in this project
+    // module()                 - external module
+    // gradleApi()              - the current Gradle API
+    // localGroovy()            - the current Groovy API 
+    
+    implementation 'com.google.guava:guava:27.0.1-jre'
+    testImplementation 'junit:junit:4.+' // dynamic versions: 4 over 4.something up to but not including 5 
+}
+
+test {
+    // testLogging.showStandardStreams = true           // print all stdout/stderr output to console
+
+    /*
+    beforeTest {
+        logger.lifecycle("Running " + it)
+    }
+    */
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}

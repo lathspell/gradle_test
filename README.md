@@ -60,6 +60,25 @@ Create new projects
 
     gradle init --type java-library --project-name jvm-library --dsl kotlin
 
+Dependencies
+============
+
+Types of dependencies:
+* {default}                - external dependency
+* project()                - another project
+* files() or fileTree()    - files in this project
+* module()                 - external module
+* gradleApi()              - the current Gradle API
+* localGroovy()            - the current Groovy API 
+
+Common types of external dependencies:
+
+                compiletime main    compiletime test    runtime main    runtime test     
+    compile     x                   x                   x               x
+    runtime     -                   -                   x               x               
+    testCompile -                   x                   -               x
+    testRuntime -                   -                   -               x
+
 Plugins
 =======
 
