@@ -111,6 +111,17 @@ use "cleanJar" to clean the output of the "Jar" task.
     -----
     Pattern: clean<TaskName>: Cleans the output files of a task.
 
+Multi-Projects
+==============
+
+* There should be one `settings.gradle` with `rootProject.name = …`
+* Subprojects are included with `include sub1, sub2, sub3` in `settings.gradle`
+* Tasks and projects can be referenced with `project(…) {}, allprojects {}, subprojects {}`
+* Tasks are created while the project build.gralde is read. Sometimes the configuration in e.g. `allprojects` has
+  to be postponed with `afterEvaluate {}` until all build scripts are read and all tasks were created.
+* Using `tasks["foo"].configure {}` an existing task can be modified
+* Using the ext namespace like in `ext.foo = 42`, a custom variable can be introduced and later referenced as `project.foo`
+
 Templates
 ==========
 

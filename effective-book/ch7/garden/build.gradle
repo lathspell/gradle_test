@@ -1,0 +1,51 @@
+
+task("printInfo") {
+    doLast {
+        println("This is ${project.name}")
+    }
+}
+
+// There is no build.gradle in the tree/ directory but a project definition here!
+project("tree") {
+    task("printInfo") {
+        doLast {
+            println("This is ${project.name}")
+        }
+    }
+}
+
+allprojects {
+    afterEvaluate {
+        tasks["printInfo"].configure {
+            doFirst {
+                println("First thing in ${project.name}")
+            }
+        }
+        tasks["printInfo"].configure {
+            doFirst {
+                println("Really first thing in ${project.name}")
+            }
+        }
+    }
+}
+
+subprojects {
+    // Wait until the task :flower:printInfo has actually been read from flower/build.gradle!
+    afterEvaluate { project ->
+        tasks["printInfo"].configure {
+            doLast {
+                println("Can be planted and has " + (project.hasLeaves ? "" : "no ") + "leaves")
+            }
+        }
+    }
+}
+
+
+project("tree") {
+    ext.hasLeaves = true
+}
+
+project("flower") {
+    ext.hasLeaves = false
+    printInfo.dependsOn(":tree:printInfo") // have tree executed first
+}

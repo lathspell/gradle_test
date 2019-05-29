@@ -1,0 +1,3 @@
+rootProject.name = "garden"
+
+include "tree", "flower"
