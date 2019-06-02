@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'application'
+
+    id 'checkstyle'
+    id 'pmd'
+    // id 'findbugs' - deprecated, recommending SpotBugs
+    id 'com.github.spotbugs' version '2.0.0'
+    // id 'jdepend' - unmaintained
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+dependencies {
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+}
+tasks.withType(Checkstyle) {
+    ignoreFailures = true
+    reports {
+        xml {
+            destination = file("${checkstyle.reportsDir}/checkstyle.xml") // change default
+        }
+    }
+}
+
+tasks.withType(Pmd) {
+    ignoreFailures = true
+    ruleSets = ['category/java/bestpractices.xml', 'category/java/performance.xml/StringInstantiation']
+    consoleOutput = false
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    ignoreFailures = true
+    reports.xml.enabled = true
+    reports.html.enabled = false
+}
+
+tasks.withType(JDepend) {
+    ignoreFailures = true
+}
+
+mainClassName = 'ch9.App'
