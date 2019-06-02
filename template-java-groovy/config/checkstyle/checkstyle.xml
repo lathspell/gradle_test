@@ -3,12 +3,14 @@
 <module name="Checker">
   <!-- <module name="JavadocPackage"/> -->
   <module name="NewlineAtEndOfFile"/>
+
   <module name="RegexpSingleline">
     <property name="format" value="\s+$"/>
     <property name="minimum" value="0"/>
     <property name="maximum" value="0"/>
     <property name="message" value="Line has trailing spaces."/>
   </module>
+
   <module name="TreeWalker">
     <module name="IllegalImport"/>
     <module name="RedundantImport"/>
@@ -24,4 +26,5 @@
     <module name="InterfaceIsType"/>
     <module name="VisibilityModifier"/>
   </module>
+
 </module>
