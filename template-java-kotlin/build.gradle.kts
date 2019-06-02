@@ -1,13 +1,16 @@
-group = "de.lathspell"
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    java                    // https://docs.gradle.org/current/userguide/java_plugin.html
-    application             // https://docs.gradle.org/current/userguide/application_plugin.html
-    id("com.github.ben-manes.versions") version "0.21.0"        // https://github.com/ben-manes/gradle-versions-plugin for ":  dependencyUpdates"
+    java                                                            // https://docs.gradle.org/current/userguide/java_plugin.html
+    application                                                     // https://docs.gradle.org/current/userguide/application_plugin.html
+
     id("com.github.johnrengelman.shadow") version "5.0.0"       // https://imperceptiblethoughts.com/shadow/getting-started/ for ":shadowJar"
-    // id("com.palantir.docker") version "0.21.0"                   // https://github.com/palantir/gradle-docker/ for ":docker"
     id("com.bmuschko.docker-java-application") version "4.6.2"  // https://github.com/bmuschko/gradle-docker-plugin for ":docker"
     id("com.gorylenko.gradle-git-properties") version "2.0.0"   // https://github.com/n0mer/gradle-git-properties
+
+    id("com.github.ben-manes.versions") version "0.21.0"        // https://github.com/ben-manes/gradle-versions-plugin for ":dependencyUpdates"
+    id("checkstyle")                                            // https://docs.gradle.org/current/userguide/checkstyle_plugin.html
+    id("pmd")                                                   // https://docs.gradle.org/current/userguide/pmd_plugin.html
 }
 
 repositories {
@@ -15,13 +18,13 @@ repositories {
 }
 
 dependencies {
-    val lombokVersion = "1.18.6"
+    val lombokVersion = "1.18.8"
 
-    annotationProcessor(group = "org.projectlombok", name = "lombok", version = lombokVersion)
-    compileOnly(group = "org.projectlombok", name = "lombok", version = lombokVersion)
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
 
     testImplementation("junit:junit:4.12")
-    testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation("org.assertj:assertj-core:3.12.2")
 
     implementation("ch.qos.logback:logback-core:1.2.3")
 }
@@ -31,6 +34,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
 configure<JavaPluginConvention> {
     manifest {
         attributes("Main-Class" to "de.lathspell.App")
@@ -50,12 +54,16 @@ gitProperties {
     extProperty = "gitProps" // git properties will be put in a map at project.ext.gitProps
 }
 
-tasks {
-    withType<Jar> {
-        manifest {
-            attributes(mapOf("Main-Class" to application.mainClassName))
-        }
+tasks.withType<Jar>() {
+    manifest {
+        attributes(mapOf("Main-Class" to application.mainClassName))
     }
+}
+
+tasks.test {
+    testLogging.showStandardStreams = true
+    testLogging.minGranularity = 3
+    testLogging.events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
 }
 
 docker {

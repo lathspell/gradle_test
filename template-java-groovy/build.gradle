@@ -1,10 +1,14 @@
 plugins {
-    id 'java'                    // https://docs.gradle.org/current/userguide/java_plugin.html
-    id 'application'             // https://docs.gradle.org/current/userguide/application_plugin.html
-    id "com.github.ben-manes.versions" version "0.21.0"        // https://github.com/ben-manes/gradle-versions-plugin for ":  dependencyUpdates"
-    id"com.github.johnrengelman.shadow" version "5.0.0"       // https://imperceptiblethoughts.com/shadow/getting-started/ for ":shadowJar"
-    id "com.bmuschko.docker-java-application" version "4.6.2"  // https://github.com/bmuschko/gradle-docker-plugin for ":docker"
-    id "com.gorylenko.gradle-git-properties" version "2.0.0"   // https://github.com/n0mer/gradle-git-properties
+    id 'java'                                                   // https://docs.gradle.org/current/userguide/java_plugin.html
+    id 'application'                                            // https://docs.gradle.org/current/userguide/application_plugin.html
+
+    id "com.github.johnrengelman.shadow" version "5.0.0"        // https://imperceptiblethoughts.com/shadow/getting-started/ for ":shadowJar"
+    id "com.bmuschko.docker-java-application" version "4.9.0"   // https://github.com/bmuschko/gradle-docker-plugin for ":docker"
+    id "com.gorylenko.gradle-git-properties" version "2.0.0"    // https://github.com/n0mer/gradle-git-properties
+
+    id "com.github.ben-manes.versions" version "0.21.0"         // https://github.com/ben-manes/gradle-versions-plugin for ":dependencyUpdates"
+    id 'checkstyle'                                             // https://docs.gradle.org/current/userguide/checkstyle_plugin.html
+    id 'pmd'                                                    // https://docs.gradle.org/current/userguide/pmd_plugin.html
 }
 
 repositories {
@@ -12,13 +16,13 @@ repositories {
 }
 
 dependencies {
-    ext.lombokVersion = "1.18.6"
+    ext.lombokVersion = "1.18.8"
 
-    annotationProcessor (group : "org.projectlombok", name: "lombok", version : lombokVersion)
-    compileOnly(group : "org.projectlombok", name : "lombok", version : lombokVersion)
+    annotationProcessor ("org.projectlombok:lombok:$lombokVersion")
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
 
     testImplementation "junit:junit:4.12"
-    testImplementation "org.assertj:assertj-core:3.11.1"
+    testImplementation "org.assertj:assertj-core:3.12.2"
 
     implementation "ch.qos.logback:logback-core:1.2.3"
 }
